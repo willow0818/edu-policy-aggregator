@@ -1,0 +1,48 @@
+name: Weekly Education Policy Scrape
+
+on:
+  schedule:
+    # Every Sunday at 2:00 AM (UTC+8 / Beijing time)
+    # Cron expression: minute hour day-of-month month day-of-week
+    - cron: '0 2 * * 0'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Install Playwright browsers
+        run: |
+          playwright install chromium --with-deps
+
+      - name: Run scraper
+        run: python -m src.scraper.main
+        env:
+          SCRAPE_LOG_LEVEL: INFO
+
+      - name: Commit and push updates
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+          # Check if there are changes
+          if git diff --stat | grep -q "articles.json"; then
+            git add data/articles.json
+            git commit -m "Update articles $(date -I)"
+            git push
+          else
+            echo "No changes to articles.json, skipping commit"
+          fi

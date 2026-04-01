@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每周教育政策资讯</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>每周教育政策资讯</h1>
+            <p class="subtitle">职业教育 · 本科教育</p>
+            <p class="last-updated" id="last-updated"></p>
+        </header>
+
+        <div class="filter-bar">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">全部</button>
+                <button class="filter-tab" data-filter="职业教育">职业教育</button>
+                <button class="filter-tab" data-filter="本科教育">本科教育</button>
+                <button class="filter-tab" data-filter="政策">政策</button>
+                <button class="filter-tab" data-filter="资讯">资讯</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="搜索政策资讯...">
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="stats-bar">
+                <span id="article-count">共 0 条</span>
+                <span class="source-list">数据来源: 教育部 · 人社部 · 各省教育局 · 主流媒体 · EdTech厂商</span>
+            </div>
+
+            <div class="article-list" id="article-list">
+                <div class="loading">加载中...</div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>每周自动更新 · 数据来源于各政府官网及主流媒体</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/locale/zh-cn.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+    <script src="js/data-loader.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
