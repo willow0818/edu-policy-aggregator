@@ -4,52 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>每周教育政策资讯</title>
+    <meta name="description" content="聚合职业教育、本科教育政策资讯，每周六更新">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1>每周教育政策资讯</h1>
-            <p class="subtitle">职业教育 · 本科教育</p>
-            <p class="last-updated" id="last-updated"></p>
+            <div class="header-inner">
+                <p class="header-eyebrow">Intelligence Report</p>
+                <h1>每周<em>教育</em>政策资讯</h1>
+                <p class="subtitle">职业教育 · 本科教育</p>
+                <p class="last-updated">
+                    <span class="live-dot"></span>
+                    <span id="last-updated"></span>
+                </p>
+            </div>
         </header>
 
         <nav class="nav-bar">
-            <div class="nav-left">
-                <button class="nav-item active" data-filter="all">全部</button>
+            <div class="nav-inner">
+                <div class="nav-left">
+                    <button class="nav-item active" data-filter="all">全部</button>
 
-                <div class="nav-dropdown">
-                    <button class="nav-item nav-dropdown-btn" data-filter="教育政策">
-                        教育政策
-                        <span class="arrow">▾</span>
-                    </button>
-                    <div class="nav-dropdown-menu">
-                        <div class="dropdown-submenu">
-                            <button class="nav-item submenu-btn" data-filter="本科教育">本科教育</button>
-                            <div class="submenu-items">
-                                <button class="nav-item sub-item" data-filter="本科教育-国家">国家政策</button>
-                                <button class="nav-item sub-item" data-filter="本科教育-省级">省级政策</button>
+                    <div class="nav-dropdown">
+                        <button class="nav-item nav-dropdown-btn" data-filter="教育政策">
+                            教育政策
+                            <span class="arrow">▾</span>
+                        </button>
+                        <div class="nav-dropdown-menu">
+                            <div class="dropdown-submenu">
+                                <button class="nav-item submenu-btn" data-filter="本科教育">本科教育</button>
+                                <div class="submenu-items">
+                                    <button class="nav-item sub-item" data-filter="本科教育-国家">国家政策</button>
+                                    <button class="nav-item sub-item" data-filter="本科教育-省级">省级政策</button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="dropdown-submenu">
-                            <button class="nav-item submenu-btn" data-filter="职业教育">职业教育</button>
-                            <div class="submenu-items">
-                                <button class="nav-item sub-item" data-filter="职业教育-国家">国家政策</button>
-                                <button class="nav-item sub-item" data-filter="职业教育-省级">省级政策</button>
+                            <div class="dropdown-submenu">
+                                <button class="nav-item submenu-btn" data-filter="职业教育">职业教育</button>
+                                <div class="submenu-items">
+                                    <button class="nav-item sub-item" data-filter="职业教育-国家">国家政策</button>
+                                    <button class="nav-item sub-item" data-filter="职业教育-省级">省级政策</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <button class="nav-item" data-filter="友商">友商资讯</button>
-                <button class="nav-item" data-filter="行业">行业动态</button>
-            </div>
-            <div class="nav-right">
-                <div class="search-box">
-                    <input type="text" id="search-input" placeholder="搜索政策资讯...">
+                    <button class="nav-item" data-filter="友商">友商资讯</button>
+                    <button class="nav-item" data-filter="行业">行业动态</button>
+                </div>
+                <div class="nav-right">
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="搜索政策资讯...">
+                    </div>
                 </div>
             </div>
         </nav>
@@ -66,7 +75,7 @@
         </div>
 
         <footer class="footer">
-            <p>每周自动更新 · 数据来源于各政府官网及主流媒体</p>
+            <p>每周六自动更新 · 数据来源于<strong>新华网</strong>、<strong>人民网</strong>、<strong>光明日报</strong>等主流媒体转载</p>
         </footer>
     </div>
 

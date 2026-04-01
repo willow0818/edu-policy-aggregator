@@ -39,6 +39,6 @@ const DataLoader = {
 
         dayjs.locale('zh-cn');
         const date = dayjs(metadata.last_updated);
-        return `最后更新: ${date.format('YYYY年MM月DD日 HH:mm')}`;
+        return `最后更新 ${date.format('YYYY.MM.DD HH:mm')}`;
     }
 };
