@@ -1,14 +1,16 @@
-name: Weekly Education Policy Scrape
+name: Weekly Education Policy Scrape and Deploy
 
 on:
   schedule:
     # Every Sunday at 2:00 AM (UTC+8 / Beijing time)
-    # Cron expression: minute hour day-of-month month day-of-week
     - cron: '0 2 * * 0'
   workflow_dispatch:  # Allow manual trigger
+  push:
+    branches:
+      - main  # Also run on main branch push
 
 jobs:
-  scrape:
+  scrape-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,16 +35,29 @@ jobs:
         env:
           SCRAPE_LOG_LEVEL: INFO
 
-      - name: Commit and push updates
+      - name: Configure Git
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
 
-          # Check if there are changes
+      - name: Commit articles update
+        run: |
           if git diff --stat | grep -q "articles.json"; then
             git add data/articles.json
             git commit -m "Update articles $(date -I)"
             git push
           else
-            echo "No changes to articles.json, skipping commit"
+            echo "No changes to articles.json"
           fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'frontend'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
