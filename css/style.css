@@ -11,6 +11,7 @@
     --accent-undergraduate: #0b8043;
     --accent-news: #9334e6;
     --accent-policy: #1a73e8;
+    --accent-vendor: #0097a7;
 }
 
 * {
@@ -59,42 +60,123 @@ body {
     margin-top: 12px;
 }
 
-/* ===== Filter Bar ===== */
-.filter-bar {
+/* ===== Navigation Bar ===== */
+.nav-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
     flex-wrap: wrap;
     gap: 12px;
-}
-
-.filter-tabs {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.filter-tab {
-    padding: 8px 16px;
-    border: 1px solid var(--border-color);
     background: var(--card-background);
-    border-radius: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.nav-left {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.nav-item {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
     color: var(--text-secondary);
     transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
-.filter-tab:hover {
-    border-color: var(--primary-color);
-    color: var(--primary-color);
+.nav-item:hover {
+    background: #f1f3f4;
+    color: var(--text-primary);
 }
 
-.filter-tab.active {
+.nav-item.active {
     background: var(--primary-color);
     color: white;
-    border-color: var(--primary-color);
+}
+
+/* Dropdown */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-dropdown-btn .arrow {
+    font-size: 10px;
+    transition: transform 0.2s ease;
+}
+
+.nav-dropdown:hover .nav-dropdown-btn .arrow {
+    transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 160px;
+    padding: 8px 0;
+    z-index: 100;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+    display: block;
+}
+
+/* Submenu */
+.dropdown-submenu {
+    position: relative;
+}
+
+.submenu-btn {
+    width: 100%;
+    text-align: left;
+    border-radius: 0;
+}
+
+.submenu-items {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 120px;
+    padding: 8px 0;
+}
+
+.dropdown-submenu:hover .submenu-items {
+    display: block;
+}
+
+.sub-item {
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+}
+
+/* Nav right (search) */
+.nav-right {
+    display: flex;
+    align-items: center;
 }
 
 .search-box input {
@@ -124,8 +206,9 @@ body {
     color: var(--text-secondary);
 }
 
-.source-list {
-    font-size: 12px;
+.current-filter {
+    font-weight: 500;
+    color: var(--primary-color);
 }
 
 /* ===== Article List ===== */
@@ -141,7 +224,6 @@ body {
     padding: 20px;
     border-left: 4px solid var(--primary-color);
     transition: box-shadow 0.2s ease;
-    cursor: pointer;
 }
 
 .article-card:hover {
@@ -156,12 +238,20 @@ body {
     border-left-color: var(--accent-undergraduate);
 }
 
-.article-card.news {
+.article-card.vendor {
+    border-left-color: var(--accent-vendor);
+}
+
+.article-card.industry {
     border-left-color: var(--accent-news);
 }
 
-.article-card.policy {
+.article-card.national {
     border-left-color: var(--accent-policy);
+}
+
+.article-card.provincial {
+    border-left-color: #f57c00;
 }
 
 .article-header {
@@ -190,10 +280,11 @@ body {
 
 .article-meta {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     font-size: 13px;
     color: var(--text-secondary);
     margin-bottom: 10px;
+    flex-wrap: wrap;
 }
 
 .article-meta .category-tag {
@@ -213,14 +304,24 @@ body {
     color: var(--accent-undergraduate);
 }
 
-.category-tag.news {
+.category-tag.vendor {
+    background: #e0f7fa;
+    color: var(--accent-vendor);
+}
+
+.category-tag.industry {
     background: #f3e5f5;
     color: var(--accent-news);
 }
 
-.category-tag.policy {
+.category-tag.national {
     background: #e3f2fd;
     color: var(--accent-policy);
+}
+
+.category-tag.provincial {
+    background: #fff3e0;
+    color: #f57c00;
 }
 
 .article-summary {
@@ -258,18 +359,42 @@ body {
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 600px) {
-    .filter-bar {
+@media (max-width: 768px) {
+    .nav-bar {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .filter-tabs {
+    .nav-left {
+        justify-content: center;
+    }
+
+    .nav-right {
         justify-content: center;
     }
 
     .search-box input {
         width: 100%;
+    }
+
+    .nav-dropdown-menu {
+        position: static;
+        box-shadow: none;
+        padding-left: 16px;
+    }
+
+    .submenu-items {
+        position: static;
+        box-shadow: none;
+        padding-left: 16px;
+    }
+
+    .dropdown-submenu:hover .submenu-items {
+        display: none;
+    }
+
+    .dropdown-submenu:active .submenu-items {
+        display: block;
     }
 
     .stats-bar {

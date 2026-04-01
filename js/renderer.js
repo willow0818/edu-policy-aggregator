@@ -34,13 +34,10 @@ const Renderer = {
         const container = document.getElementById('article-list');
         if (!container) return;
 
-        // Filter articles
+        // Apply filter
         let filteredArticles = articles;
         if (filter !== 'all') {
-            filteredArticles = articles.filter(article => {
-                const category = article.primary_category || '';
-                return category === filter;
-            });
+            filteredArticles = this.applyFilter(articles, filter);
         }
 
         // Update count
@@ -62,6 +59,40 @@ const Renderer = {
     },
 
     /**
+     * Apply filter to articles
+     */
+    applyFilter(articles, filter) {
+        return articles.filter(article => {
+            const sourceType = article.source_type || '';
+            const educationLevel = article.education_level || '';
+            const policyLevel = article.policy_level || '';
+
+            switch (filter) {
+                case 'all':
+                    return true;
+                case '本科教育':
+                    return educationLevel === '本科教育';
+                case '职业教育':
+                    return educationLevel === '职业教育';
+                case '本科教育-国家':
+                    return educationLevel === '本科教育' && policyLevel === '国家';
+                case '本科教育-省级':
+                    return educationLevel === '本科教育' && policyLevel === '省级';
+                case '职业教育-国家':
+                    return educationLevel === '职业教育' && policyLevel === '国家';
+                case '职业教育-省级':
+                    return educationLevel === '职业教育' && policyLevel === '省级';
+                case '友商':
+                    return sourceType === 'vendor';
+                case '行业':
+                    return sourceType === 'industry' || sourceType === 'news';
+                default:
+                    return true;
+            }
+        });
+    },
+
+    /**
      * Create an article card element
      * @param {Object} article - Article data
      * @returns {HTMLElement} - Article card element
@@ -70,16 +101,15 @@ const Renderer = {
         const card = document.createElement('div');
         card.className = 'article-card';
 
-        // Add category class
-        const category = article.primary_category || 'policy';
-        const categoryClass = this.getCategoryClass(category);
-        card.classList.add(categoryClass);
+        // Determine card class based on content type
+        const cardClass = this.getCardClass(article);
+        card.classList.add(cardClass);
 
         // Format date
         const date = article.published_date ? this.formatDate(article.published_date) : '未知日期';
 
-        // Get category tag display
-        const categoryTag = this.getCategoryTag(category);
+        // Get tags
+        const tags = this.getArticleTags(article);
 
         card.innerHTML = `
             <div class="article-header">
@@ -90,7 +120,7 @@ const Renderer = {
                 </h3>
             </div>
             <div class="article-meta">
-                <span class="category-tag ${categoryClass}">${categoryTag}</span>
+                ${tags}
                 <span class="source">${this.escapeHtml(article.source)}</span>
                 <span class="date">${date}</span>
             </div>
@@ -101,33 +131,67 @@ const Renderer = {
     },
 
     /**
-     * Get CSS class for category
-     * @param {string} category - Category name
-     * @returns {string} - CSS class name
+     * Get CSS class for card based on article content
      */
-    getCategoryClass(category) {
-        const mapping = {
-            '职业教育': 'vocational',
-            '本科教育': 'undergraduate',
-            '资讯': 'news',
-            '政策': 'policy'
-        };
-        return mapping[category] || 'policy';
+    getCardClass(article) {
+        const educationLevel = article.education_level || '';
+        const policyLevel = article.policy_level || '';
+        const sourceType = article.source_type || '';
+
+        if (sourceType === 'vendor') return 'vendor';
+        if (sourceType === 'industry') return 'industry';
+        if (policyLevel === '国家') return 'national';
+        if (policyLevel === '省级') return 'provincial';
+        if (educationLevel === '本科教育') return 'undergraduate';
+        if (educationLevel === '职业教育') return 'vocational';
+
+        return 'national';
     },
 
     /**
-     * Get category tag display text
-     * @param {string} category - Category name
-     * @returns {string} - Tag display text
+     * Get article tags HTML
      */
-    getCategoryTag(category) {
+    getArticleTags(article) {
+        const tags = [];
+        const educationLevel = article.education_level || '';
+        const policyLevel = article.policy_level || '';
+        const sourceType = article.source_type || '';
+
+        if (educationLevel) {
+            tags.push(`<span class="category-tag ${this.getEducationClass(educationLevel)}">${educationLevel}</span>`);
+        }
+
+        if (policyLevel) {
+            tags.push(`<span class="category-tag ${this.getPolicyClass(policyLevel)}">${policyLevel}</span>`);
+        }
+
+        if (sourceType === 'vendor') {
+            tags.push(`<span class="category-tag vendor">友商</span>`);
+        }
+
+        return tags.join('');
+    },
+
+    /**
+     * Get CSS class for education level
+     */
+    getEducationClass(level) {
         const mapping = {
-            '职业教育': '职业教育',
-            '本科教育': '本科教育',
-            '资讯': '资讯',
-            '政策': '政策'
+            '职业教育': 'vocational',
+            '本科教育': 'undergraduate'
         };
-        return mapping[category] || '政策';
+        return mapping[level] || '';
+    },
+
+    /**
+     * Get CSS class for policy level
+     */
+    getPolicyClass(level) {
+        const mapping = {
+            '国家': 'national',
+            '省级': 'provincial'
+        };
+        return mapping[level] || '';
     },
 
     /**
